@@ -5,6 +5,7 @@ const ReportPage: React.FC = () => {
   const { keycloak, initialized } = useKeycloak();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<any>(null);
 
   const downloadReport = async () => {
     if (!keycloak?.token) {
@@ -22,6 +23,16 @@ const ReportPage: React.FC = () => {
         }
       });
 
+      if (response.ok) {
+        const responseData = await response.json();
+        setData(responseData);
+      } else {
+        if (response.status === 403) {
+          setError(`Server error [${response.status}]: Forbidden`);
+        } else {
+          setError(`Server error [${response.status}]: ${response.statusText}`);
+        }
+      }
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -67,6 +78,18 @@ const ReportPage: React.FC = () => {
             {error}
           </div>
         )}
+
+        {data && (
+            <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
+              <h1 className="text-2xl font-bold mb-6">Report data: {data.date}</h1>
+              <ul>
+                {data.data.map((item: string, index: number) => (
+                    <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+        )}
+
       </div>
     </div>
   );

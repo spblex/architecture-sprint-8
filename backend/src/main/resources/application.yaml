@@ -1,0 +1,21 @@
+server:
+  port: 8000
+ru:
+  spblex:
+    frontend:
+      url: ${FRONTEND_URL:-}
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${FRONTEND_JWT_ISSUER_URL:-}/realms/reports-realm
+          jwk-set-uri: ${KEYCLOAK_URL:-}/realms/reports-realm/protocol/openid-connect/certs
+          client-id: ${KEYCLOAK_CLIENT_ID:-}
+          client-secret: ${KEYCLOAK_CLIENT_SECRET:-}
+logging:
+  level:
+    org.springframework.web.cors: ${LOGGING_LEVEL:INFO}
+    org.springframework.security: ${LOGGING_LEVEL:INFO}
+    org.springframework.security.oauth2: ${LOGGING_LEVEL:INFO}
+    org.springframework.security.jwt: ${LOGGING_LEVEL:INFO}
