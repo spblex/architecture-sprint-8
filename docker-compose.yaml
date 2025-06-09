@@ -46,7 +46,21 @@ services:
       REACT_APP_KEYCLOAK_CLIENT_ID: reports-frontend
     networks:
       - intranet
-
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      FRONTEND_URL: http://localhost:3000
+      FRONTEND_JWT_ISSUER_URL: http://localhost:8080
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_CLIENT_ID: reports-api
+      KEYCLOAK_CLIENT_SECRET: oNwoLQdvJAvRcL89SydqCWCe5ry1jMgq
+      LOGGING_LEVEL: TRACE
+    networks:
+      - intranet
 networks:
   intranet:
     driver: bridge
